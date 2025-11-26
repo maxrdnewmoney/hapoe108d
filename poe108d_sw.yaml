@@ -1,0 +1,173 @@
+command_line:
+  - sensor:
+      name: "poe108d Switch All Data"
+      unique_id: poe108d_switch_all_data
+      # 請確認您的 python 檔案路徑是否正確
+      command: "python3 /config/scripts/poe108d_scraper.py 192.168.60.15"
+      # 根據需求調整更新頻率 (秒)
+      scan_interval: 60
+      # 抓取 Python 輸出的 status 欄位
+      value_template: "{{ value_json.status }}"
+      # 將 ports 和 device_info 存為屬性，供下方 Template Sensor 使用
+      json_attributes:
+        - ports
+        - device_info
+
+template:
+  - sensor:
+      # ==========================
+      # 全機資訊感測器
+      # ==========================
+      - name: "poe108d Input Voltage"
+        unique_id: poe108d_input_voltage
+        unit_of_measurement: "V"
+        device_class: voltage
+        state_class: measurement
+        state: >
+          {% set info = state_attr('sensor.poe108d_switch_all_data', 'device_info') %}
+          {{ info.voltage_v if info is defined else 0 }}
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'device_info') is not none }}"
+
+      - name: "poe108d Total Power"
+        unique_id: poe108d_total_power
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+        state: >
+          {% set info = state_attr('sensor.poe108d_switch_all_data', 'device_info') %}
+          {{ info.total_power_w if info is defined else 0 }}
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'device_info') is not none }}"
+
+      # ==========================
+      # Port 1 - 10 感測器
+      # ==========================
+      
+      # Port 1 (PoE)
+      - name: "poe108d Port 1"
+        unique_id: poe108d_port_1
+        icon: mdi:ethernet-cable
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port1']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port1']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port1']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port1']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port1']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 2 (PoE)
+      - name: "poe108d Port 2"
+        unique_id: poe108d_port_2
+        icon: mdi:ethernet-cable
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port2']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port2']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port2']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port2']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port2']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 3 (PoE)
+      - name: "poe108d Port 3"
+        unique_id: poe108d_port_3
+        icon: mdi:ethernet
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port3']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port3']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port3']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port3']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port3']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 4 (PoE)
+      - name: "poe108d Port 4"
+        unique_id: poe108d_port_4
+        icon: mdi:ethernet
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port4']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port4']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port4']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port4']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port4']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 5 (PoE)
+      - name: "poe108d Port 5"
+        unique_id: poe108d_port_5
+        icon: mdi:ethernet
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port5']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port5']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port5']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port5']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port5']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 6 (PoE)
+      - name: "poe108d Port 6"
+        unique_id: poe108d_port_6
+        icon: mdi:ethernet
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port6']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port6']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port6']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port6']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port6']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 7 (PoE)
+      - name: "poe108d Port 7"
+        unique_id: poe108d_port_7
+        icon: mdi:ethernet
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port7']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port7']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port7']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port7']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port7']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 8 (PoE)
+      - name: "poe108d Port 8"
+        unique_id: poe108d_port_8
+        icon: mdi:ethernet
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port8']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port8']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port8']['link_code'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port8']['opcode'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port8']['ip'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 9 (Uplink/SFP)
+      - name: "poe108d Port 9"
+        unique_id: poe108d_port_9
+        icon: mdi:ethernet
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port9']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port9']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port9']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port9']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port9']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"
+
+      # Port 10 (Uplink/SFP)
+      - name: "poe108d Port 10"
+        unique_id: poe108d_port_10
+        icon: mdi:ethernet
+        state: >
+          {{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port10']['state'] | default('Unknown') }}
+        attributes:
+          poe_power: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port10']['poe_power_w'] }} W"
+          link_code: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port10']['link_code'] }}"
+          ip: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port10']['ip'] }}"
+          opcode: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports')['port10']['opcode'] }}"
+        availability: "{{ state_attr('sensor.poe108d_switch_all_data', 'ports') is not none }}"

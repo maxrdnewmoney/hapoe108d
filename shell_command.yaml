@@ -1,0 +1,6 @@
+shell_command:
+  # 動作 2: 全機重啟
+  poe108d_switch_reboot: "python3 /config/scripts/hasivo_2.5g_scraper.py {{ ip }} reboot"
+
+  # 動作 3: Port 重啟 (需要 IP, Port 字串, Opcode)
+  poe108d_port_reboot: "python3 /config/scripts/hasivo_2.5g_scraper.py {{ ip }} port {{ opcode }}"
