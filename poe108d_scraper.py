@@ -17,7 +17,7 @@ import time
 # ================= 配置區域 (請確認) =================
 # 如果命令行未提供 IP，將使用此預設 IP 執行數據獲取
 TARGET_IP = "192.168.60.15" 
-PASSWORD = "Nx661021Nx"
+PASSWORD = "poe密碼"
 
 # BASE_URL 將在 main() 函式中根據 TARGET_IP 設定
 BASE_URL = "" 
@@ -322,4 +322,5 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
+
     main()
